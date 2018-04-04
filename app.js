@@ -26,18 +26,6 @@ const btnUpdateName = document.getElementById("btnUpdateName");
 var mess;
 btnLogin.addEventListener('click', e => {
 	firebase.auth().signInWithRedirect(provider);
-
-	/*console.log("TEST");
-	const email = txtEmail.value;
-	const pass = txtPassword.value;
-	const auth = firebase.auth();
-	const promise = auth.signInWithEmailAndPassword(email,pass);
-	promise.catch(e => {
-		console.log(e.messsage)
-		$(document).ready(function(){
-			$("#logFailedAlert").slideDown().delay("100").slideUp();
-		});
-	});*/
 });
 var userID;
 btnSignUp.addEventListener('click', e => {
