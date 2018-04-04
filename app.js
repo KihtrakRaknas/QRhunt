@@ -54,25 +54,11 @@ btnSignUp.addEventListener('click', e => {
 
 btnSignUpWithGoogle.addEventListener('click', e => {
 	firebase.auth().signInWithRedirect(provider);
-		firebase.auth().getRedirectResult().then(function(result) {
-		  if (result.credential) {
-			// This gives you a Google Access Token. You can use it to access the Google API.
-			var token = result.credential.accessToken;
-			// ...
-		  }
-		  // The signed-in user info.
-		  var user = result.user;
-		  console.log(user);
-		}).catch(function(error) {
+		firebase.auth().getRedirectResult().then().catch(function(error) {
 			console.log(error);
-		  // Handle Errors here.
-		  var errorCode = error.code;
-		  var errorMessage = error.message;
-		  // The email of the user's account used.
-		  var email = error.email;
-		  // The firebase.auth.AuthCredential type that was used.
-		  var credential = error.credential;
-		  // ...
+			$(document).ready(function(){
+				$("#logFailedAlert").slideDown().delay("100").slideUp();
+			});
 		});
 });
 
@@ -130,6 +116,7 @@ document.getElementById("signOutLink").onclick = function(){
 	firebase.auth().signOut();
 };
 var NoUID = false;
+var displayName;
 var numOfKeys=0;
 	firebase.auth().onAuthStateChanged(firebaseUser => {
 		if(firebaseUser){
@@ -148,6 +135,7 @@ var numOfKeys=0;
 			if(NoUID){
 				uploadCode()
 			}
+			var displayName = firebaseUser.displayName;
 		}else{
 			console.log("not logged in!");
 			document.getElementById("signedInP").style.display = "none";
@@ -202,6 +190,11 @@ refObj.child("users").on("value", e =>{
 								$(document).ready(function(){
 									$("#NoNameMessage").slideDown().delay("6000").slideUp();
 								});
+								if(displayName!=null){
+									refObj.child("users").child(userID).update({
+										Name:displayName
+									});
+								}
 							}
 						}
 						num++;
@@ -228,9 +221,7 @@ refObj.child("users").on("value", e =>{
 				       }
 				       ppls[j+1] = keyarr;
 				   }
-				console.log(ppls);
 				const table = document.getElementById("myTable");
-				console.log(table.rows.length);
 				while(table.rows.length > 2){
 					table.deleteRow(-1);
 				}
@@ -262,7 +253,6 @@ refObj.child("users").on("value", e =>{
 					}
 
 					cell3.innerHTML = ppls[i].numOfKeys;
-					console.log("index #"+i+": "+ppls[i].numOfKeys);
 					if(rank == 1){
 						//row.className = "table-success";
 					}
