@@ -11,7 +11,7 @@
 			  firebase.initializeApp(config);
 
 var provider = new firebase.auth.GoogleAuthProvider();
-firebase.auth().languageCode = 'pt';
+firebase.auth().useDeviceLanguage();
 
 
 const txtEmail = document.getElementById("txtEmail");
