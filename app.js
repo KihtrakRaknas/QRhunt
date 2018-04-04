@@ -136,7 +136,7 @@ var numOfKeys=0;
 				uploadCode()
 			}
 			console.log(firebaseUser.displayName);
-			var displayName = firebaseUser.displayName;
+			displayName = firebaseUser.displayName;
 		}else{
 			console.log("not logged in!");
 			document.getElementById("signedInP").style.display = "none";
