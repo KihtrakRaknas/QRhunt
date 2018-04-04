@@ -1,1 +1,113 @@
-<!DOCTYPE html><html lang=en><meta charset=utf-8><meta content="width=device-width,initial-scale=1,shrink-to-fit=no"name=viewport><link href=https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css rel=stylesheet crossorigin=anonymous integrity=sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm><script src=https://www.gstatic.com/firebasejs/4.10.1/firebase.js></script><title>QR hunt</title><link href=favicon.ico rel="shortcut icon"type=image/x-icon><div class="alert alert-dismissible alert-success"id=uploadedAlert style=display:none><button class=close data-dismiss=alert type=button>&#10006;</button> <strong>Success!</strong> Code successfully uploaded!</div><div class="alert alert-dismissible alert-success"id=updatedAlert style=display:none><button class=close data-dismiss=alert type=button>&#10006;</button> <strong>Updated!</strong></div><div class="alert alert-dismissible alert-warning"id=notSignedInAlert style=display:none><button class=close data-dismiss=alert type=button>&#10006;</button> <strong>Not Signed In!</strong> You need to sign up or sign in order to save.</div><div class="alert alert-dismissible alert-danger"id=alreadyScannedAlert style=display:none><button class=close data-dismiss=alert type=button>&#10006;</button> <strong>Already scanned!</strong> It appears you have already scanned this code!</div><div class="alert alert-dismissible alert-danger"id=logFailedAlert style=display:none><button class=close data-dismiss=alert type=button>&#10006;</button> <strong>Failed!</strong> Log In or Sign Up unsuccessful</div><div class="alert alert-dismissible alert-info"id=NoNameMessage style=display:none><button class=close data-dismiss=alert type=button>&#10006;</button> <strong>You can save a username and a message for the leader boards!</strong> (Make sure to click Update)!</div><p id=signedInP style=display:none>You are signed in as <span id=insertNameHere></span> and have <span id=insertNumberOfCodesHere>0</span> QRs. <a href=""id=signOutLink><small>Sign Out</small></a><p><form class=form-inline id=signInForm onsubmit=return!1 style=display:none><input class=form-control id=txtEmail placeholder=Email type=email> <input class=form-control id=txtPassword placeholder=Password type=password> <button class="btn btn-action"id=btnLogin>Log in</button> <button class="btn btn-secondary"id=btnSignUp>Sign Up</button></form><form class=form-inline id=updateInfoForm onsubmit=return!1 style=display:none><input class=form-control id=txtName placeholder=Name type=txt> <input class=form-control id=txtMessage placeholder=Message type=txt> <button class="btn btn-action"id=btnUpdateName>Update</button></form><br><div class="jumbotron text-center"id=jumbo style=display:none><h1 id=welcomeMessageOnJumbo>Welcome</h1><p>You need to <strong>sign up</strong> or <strong>sign in</strong> to play!<br><br><em>QR Hunt</em> is a QR code based Scavenger hunt.<br>Below is a leaderboard of other players ranked based on the number of codes they have scanned.<br>Once logged in, you can enter in your own name and/or a message for other people to see.</div><table class="table table-striped"id=myTable width=100%><thead><tr><th>#<th>Name<th>Message<th># of QRs<tbody><tr><td>0<td>This will appear before the information is updated<td>If you see this for too long,<td>something is wrong with the server<tr><td>0<td>This will appear before the information is updated<td>If you see this for too long,<td>something is wrong with the server</table><script src=https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js></script><script>$(document).ready(function(){})</script><script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js crossorigin=anonymous integrity=sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js crossorigin=anonymous integrity=sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl></script><script src=app.js></script>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+	<title>QR hunt</title>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  </head>
+  <body>
+  	<div class="alert alert-success alert-dismissible" style="display:none" id="uploadedAlert">
+  		<button type="button" class="close" data-dismiss="alert">&#10006;</button>
+    	<strong>Success!</strong> Code successfully uploaded!
+	</div>
+	<div class="alert alert-success alert-dismissible" style="display:none" id="updatedAlert">
+	  	<button type="button" class="close" data-dismiss="alert">&#10006;</button>
+	    <strong>Updated!</strong>
+	</div>
+	<div class="alert alert-warning alert-dismissible" style="display:none" id="notSignedInAlert">
+	  	<button type="button" class="close" data-dismiss="alert">&#10006;</button>
+	    <strong>Not Signed In!</strong> You need to sign up or sign in order to save.
+	</div>
+	<div class="alert alert-danger alert-dismissible" style="display:none" id="alreadyScannedAlert">
+		 <button type="button" class="close" data-dismiss="alert">&#10006;</button>
+		 <strong>Already scanned!</strong> It appears you have already scanned this code!
+	</div>
+	<div class="alert alert-danger alert-dismissible" style="display:none" id="logFailedAlert">
+		 <button type="button" class="close" data-dismiss="alert">&#10006;</button>
+		 <strong>Failed!</strong> Log In or Sign Up unsuccessful
+	</div>
+	<div class="alert alert-info alert-dismissible" style="display:none" id="NoNameMessage">
+		<button type="button" class="close" data-dismiss="alert">&#10006;</button>
+		<strong>You can save a username and a message for the leader boards!</strong> (Make sure to click Update)!
+	</div>
+
+	<p style="display:none" id="signedInP">You are signed in as <span id = "insertNameHere"></span> and have <span id = "insertNumberOfCodesHere">0</span> QRs. <a id="signOutLink" href="javascript:window.location.reload(true)"><small>Sign Out</small></a><p>
+
+  	<form id="signInForm" class="form-inline" style="display:none" onsubmit="return false">
+
+		<input id="txtEmail" class="form-control" type="email" placeholder="Email">
+
+		<input id="txtPassword" class="form-control" type="password" placeholder="Password">
+
+		<button id="btnLogin" class="btn btn-action">Log in</button>
+
+		<button id="btnSignUp" class="btn btn-secondary">Sign Up</button>
+
+		<div class="g-signin2" data-onsuccess="onSignIn"></div>
+	</form>
+
+		<!--<br>-->
+		<form id="updateInfoForm" class="form-inline" style="display:none" onsubmit="return false">
+
+		<input id="txtName" class="form-control" type="txt" placeholder="Name">
+
+		<input id="txtMessage" class="form-control" type="txt" placeholder="Message">
+
+		<button id="btnUpdateName" class="btn btn-action">Update</button>
+		</form>
+		<br>
+
+		<div style="display:none" id = "jumbo" class="jumbotron text-center">
+		  <h1 id="welcomeMessageOnJumbo">Welcome</h1>
+		  <p>You need to <strong>sign up</strong> or <strong>sign in</strong> to play!<br><br><em>QR Hunt</em> is a QR code based Scavenger hunt.<br>Below is a leaderboard of other players ranked based on the number of codes they have scanned.<br>Once logged in, you can enter in your own name and/or a message for other people to see.</p>
+		</div>
+
+		<table id = "myTable" width = "100%" class = "table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Message</th>
+					<th># of QRs</th>
+				</tr>
+			</thead>
+
+				<tbody>
+					<tr>
+						<td>0</td>
+						<td>This will appear before the information is updated</td>
+						<td>If you see this for too long, </td>
+						<td>something is wrong with the server</td>
+					</tr>
+					<tr>
+						<td>0</td>
+						<td>This will appear before the information is updated</td>
+						<td>If you see this for too long, </td>
+						<td>something is wrong with the server</td>
+					</tr>
+				</tbody>
+
+		</table>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+   <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+
+		<script>
+			$(document).ready(function(){
+				//$("#uploadedAlert").hide();
+			});
+		</script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </body>
+</html>
