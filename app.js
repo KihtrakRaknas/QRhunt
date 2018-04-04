@@ -22,10 +22,21 @@ const btnTEST = document.getElementById("btnTEST");
 const txtName = document.getElementById("txtName");
 const txtMessage = document.getElementById("txtMessage");
 const btnUpdateName = document.getElementById("btnUpdateName");
+const btnSignUpWithGoogle = document.getElementById("btnSignUpWithGoogle");
 
 var mess;
 btnLogin.addEventListener('click', e => {
-	firebase.auth().signInWithRedirect(provider);
+	console.log("TEST");
+	const email = txtEmail.value;
+	const pass = txtPassword.value;
+	const auth = firebase.auth();
+	const promise = auth.signInWithEmailAndPassword(email,pass);
+	promise.catch(e => {
+		console.log(e.messsage)
+		$(document).ready(function(){
+			$("#logFailedAlert").slideDown().delay("100").slideUp();
+		});
+	});
 });
 var userID;
 btnSignUp.addEventListener('click', e => {
@@ -39,6 +50,30 @@ btnSignUp.addEventListener('click', e => {
 			$("#logFailedAlert").slideDown().delay("100").slideUp();
 		});
 	});
+});
+
+btnSignUpWithGoogle.addEventListener('click', e => {
+	firebase.auth().signInWithRedirect(provider);
+		firebase.auth().getRedirectResult().then(function(result) {
+		  if (result.credential) {
+			// This gives you a Google Access Token. You can use it to access the Google API.
+			var token = result.credential.accessToken;
+			// ...
+		  }
+		  // The signed-in user info.
+		  var user = result.user;
+		  console.log(user);
+		}).catch(function(error) {
+			console.log(error);
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  // The email of the user's account used.
+		  var email = error.email;
+		  // The firebase.auth.AuthCredential type that was used.
+		  var credential = error.credential;
+		  // ...
+		});
 });
 
 const refObj = firebase.database().ref();
